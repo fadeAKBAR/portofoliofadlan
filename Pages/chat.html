@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chat App (GitHub Version)</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #ece5dd; }
+    #login-screen { position: absolute; width: 100%; height: 100%; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
+    #app { display: none; width: 100%; max-width: 800px; margin: 0 auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); display: flex; }
+    .sidebar { width: 30%; border-right: 1px solid #ddd; background: #f6f6f6; overflow-y: auto; }
+    .sidebar-header { background: #075e54; color: white; padding: 15px; font-weight: bold; }
+    .user-list { list-style: none; padding: 0; margin: 0; }
+    .user-list li { padding: 15px; border-bottom: 1px solid #ddd; cursor: pointer; }
+    .user-list li:hover { background: #ebebeb; }
+    .chat-area { width: 70%; display: flex; flex-direction: column; background: #efe7dd; }
+    .chat-header { background: #075e54; color: white; padding: 15px; font-weight: bold; }
+    .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
+    .message { max-width: 60%; padding: 10px 15px; margin-bottom: 10px; border-radius: 10px; position: relative; clear: both; }
+    .msg-sent { background: #dcf8c6; align-self: flex-end; border-top-right-radius: 0; }
+    .msg-received { background: white; align-self: flex-start; border-top-left-radius: 0; }
+    .msg-time { font-size: 0.7em; color: #888; display: block; margin-top: 5px; text-align: right; }
+    .chat-input { display: flex; padding: 15px; background: #f0f0f0; }
+    .chat-input input { flex: 1; padding: 12px; border: none; border-radius: 20px; outline: none; font-size: 14px; }
+    .chat-input button { background: #075e54; color: white; border: none; padding: 10px 20px; margin-left: 10px; border-radius: 50%; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <!-- Layar Pilih Akun -->
+  <div id="login-screen">
+    <h2>Pilih Akun Anda</h2>
+    <select id="my-account" style="padding: 10px; font-size: 16px; margin-bottom: 20px;">
+      <option value="">Memuat data pengguna...</option>
+    </select>
+    <button onclick="masukApp()" style="padding: 10px 20px; background:#075e54; color:white; border:none; cursor:pointer;">Masuk</button>
+  </div>
+
+  <!-- Layar Utama -->
+  <div id="app" style="display: none;">
+    <div class="sidebar">
+      <div class="sidebar-header" id="my-name-display">WhatsApp Web Clone</div>
+      <ul class="user-list" id="user-list-ui"></ul>
+    </div>
+
+    <div class="chat-area">
+      <div class="chat-header" id="chat-with-name">Pilih kontak untuk mulai chat</div>
+      <div class="chat-box" id="chat-box"></div>
+      <div class="chat-input" style="visibility: hidden;" id="input-area">
+        <input type="text" id="msg-input" placeholder="Ketik pesan..." onkeypress="handleEnter(event)">
+        <button onclick="kirimPesan()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // PASTE URL APPS SCRIPT ANDA DI SINI
+    // ==========================================
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXKK_qjwa84JEYyMBhzpk2deHxSfm47tDm_EvAc8PqbxEUVrvjN7iDwyFd7Zze61l6/exec";
+
+    let myName = "";
+    let chatWithName = "";
+
+    // Ambil data user saat web pertama kali dibuka
+    fetch(SCRIPT_URL + "?action=getUsers")
+      .then(response => response.json())
+      .then(users => populateUsers(users))
+      .catch(error => console.error('Error fetching users:', error));
+
+    function populateUsers(users) {
+      const select = document.getElementById("my-account");
+      const ul = document.getElementById("user-list-ui");
+      select.innerHTML = "";
+      ul.innerHTML = "";
+
+      users.forEach(u => {
+        let opt = document.createElement("option");
+        opt.value = u.nama;
+        opt.text = u.nama;
+        select.appendChild(opt);
+
+        let li = document.createElement("li");
+        li.innerText = u.nama;
+        li.onclick = () => bukaChat(u.nama);
+        ul.appendChild(li);
+      });
+    }
+
+    function masukApp() {
+      const select = document.getElementById("my-account");
+      myName = select.value;
+      if (!myName) return;
+      
+      document.getElementById("login-screen").style.display = "none";
+      document.getElementById("app").style.display = "flex";
+      document.getElementById("my-name-display").innerText = "Masuk: " + myName;
+    }
+
+    function bukaChat(namaTeman) {
+      if (namaTeman === myName) {
+        alert("Anda tidak bisa chat dengan diri sendiri!");
+        return;
+      }
+      chatWithName = namaTeman;
+      document.getElementById("chat-with-name").innerText = "Chat dengan: " + chatWithName;
+      document.getElementById("input-area").style.visibility = "visible";
+      
+      document.getElementById("chat-box").innerHTML = "<p style='text-align:center; color:#888;'>Memuat pesan...</p>";
+      muatPesan();
+      
+      // Auto-refresh tiap 5 detik
+      setInterval(muatPesan, 5000);
+    }
+
+    function muatPesan() {
+      if(!chatWithName) return;
+      
+      const url = `${SCRIPT_URL}?action=getChats&user1=${encodeURIComponent(myName)}&user2=${encodeURIComponent(chatWithName)}`;
+      
+      fetch(url)
+        .then(response => response.json())
+        .then(chats => tampilkanPesan(chats))
+        .catch(error => console.error('Error fetching chats:', error));
+    }
+
+    function tampilkanPesan(chats) {
+      const box = document.getElementById("chat-box");
+      box.innerHTML = "";
+      
+      chats.forEach(chat => {
+        let div = document.createElement("div");
+        div.className = (chat.pengirim === myName) ? "message msg-sent" : "message msg-received";
+        div.innerHTML = chat.pesan + `<span class="msg-time">${chat.waktu}</span>`;
+        box.appendChild(div);
+      });
+      
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function kirimPesan() {
+      const input = document.getElementById("msg-input");
+      const pesan = input.value.trim();
+      
+      if (pesan === "") return;
+      
+      // UI Optimistic Update (Munculkan pesan seolah sudah terkirim)
+      const box = document.getElementById("chat-box");
+      let div = document.createElement("div");
+      div.className = "message msg-sent";
+      div.style.opacity = "0.7";
+      div.innerHTML = pesan + `<span class="msg-time">Mengirim...</span>`;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+      input.value = "";
+
+      // Siapkan data untuk POST request
+      let formData = new URLSearchParams();
+      formData.append('pengirim', myName);
+      formData.append('penerima', chatWithName);
+      formData.append('pesan', pesan);
+
+      // Kirim data ke Google Apps Script
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.success) muatPesan();
+      })
+      .catch(error => console.error('Error sending message:', error));
+    }
+
+    function handleEnter(e) {
+      if (e.key === 'Enter') {
+        kirimPesan();
+      }
+    }
+  </script>
+</body>
+</html>
