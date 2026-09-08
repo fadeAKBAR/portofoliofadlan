@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axioo ACP 2025</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono&display=swap');
+
+        /* --- PENGATURAN DASAR --- */
+        body {
+            background: radial-gradient(circle at top right, #1a0b2e 0%, #0b1021 50%, #000000 100%);
+            font-family: 'Space Mono', monospace;
+            color: #e0f7fa;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        /* --- WADAH UTAMA --- */
+        .kartu-profil {
+            background: rgba(16, 24, 43, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px 45px;
+            max-width: 1200px; /* Diperlebar untuk memuat 33 profil */
+            width: 100%;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.15), inset 0 0 15px rgba(0, 212, 255, 0.05);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+            letter-spacing: 2px;
+            font-size: 2.5rem;
+            margin-top: 0;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        /* --- GRID PROFIL --- */
+        .grid-profil {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .profil-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px 10px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profil-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        /* --- FOTO PROFIL --- */
+        .profil-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%; /* Membuat foto profil bulat */
+            border: 3px solid #b388ff;
+            box-shadow: 0 0 15px rgba(179, 136, 255, 0.4);
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .profil-item:hover img {
+            border-color: #00ffcc;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.6);
+        }
+
+        /* --- NAMA LINK GITHUB --- */
+        .profil-item a {
+            font-family: 'Orbitron', sans-serif;
+            color: #e0f7fa;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .profil-item:hover a {
+            color: #00ffcc;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.8);
+        }
+        
+        .github-username {
+            font-size: 0.75rem;
+            color: #b388ff;
+            display: block;
+            margin-top: 8px;
+            opacity: 0.8;
+        }
+
+        /* --- TOMBOL KEMBALI --- */
+        a.btn-kembali {
+            color: #00d4ff;
+            text-decoration: none;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.5);
+            padding: 10px 25px;
+            border-radius: 8px;
+            display: inline-block;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        a.btn-kembali:hover {
+            background: #00d4ff;
+            color: #000;
+            box-shadow: 0 0 15px #00d4ff, 0 0 30px #00d4ff;
+            border-color: #00d4ff;
+            transform: translateY(-3px);
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.8), transparent);
+            margin: 35px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="kartu-profil">
+        <h1>Axioo ACP 2025</h1>
+        
+        <div class="grid-profil">
+
+            <div class="profil-item">
+                <img src="../images/profil-1.jpg" alt="Foto Profil 1">
+                <a href="https://github.com/username1" target="_blank">Nama Siswa 1</a>
+                <span class="github-username">@username1</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-2.jpg" alt="Foto Profil 2">
+                <a href="https://github.com/username2" target="_blank">Nama Siswa 2</a>
+                <span class="github-username">@username2</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-3.jpg" alt="Foto Profil 3">
+                <a href="https://github.com/username3" target="_blank">Nama Siswa 3</a>
+                <span class="github-username">@username3</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-4.jpg" alt="Foto Profil 4">
+                <a href="https://github.com/username4" target="_blank">Nama Siswa 4</a>
+                <span class="github-username">@username4</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-5.jpg" alt="Foto Profil 5">
+                <a href="https://github.com/username5" target="_blank">Nama Siswa 5</a>
+                <span class="github-username">@username5</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-6.jpg" alt="Foto Profil 6">
+                <a href="https://github.com/username6" target="_blank">Nama Siswa 6</a>
+                <span class="github-username">@username6</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-7.jpg" alt="Foto Profil 7">
+                <a href="https://github.com/username7" target="_blank">Nama Siswa 7</a>
+                <span class="github-username">@username7</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-8.jpg" alt="Foto Profil 8">
+                <a href="https://github.com/username8" target="_blank">Nama Siswa 8</a>
+                <span class="github-username">@username8</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-9.jpg" alt="Foto Profil 9">
+                <a href="https://github.com/username9" target="_blank">Nama Siswa 9</a>
+                <span class="github-username">@username9</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-10.jpg" alt="Foto Profil 10">
+                <a href="https://github.com/username10" target="_blank">Nama Siswa 10</a>
+                <span class="github-username">@username10</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-11.jpg" alt="Foto Profil 11">
+                <a href="https://github.com/username11" target="_blank">Nama Siswa 11</a>
+                <span class="github-username">@username11</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-12.jpg" alt="Foto Profil 12">
+                <a href="https://github.com/username12" target="_blank">Nama Siswa 12</a>
+                <span class="github-username">@username12</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-13.jpg" alt="Foto Profil 13">
+                <a href="https://github.com/username13" target="_blank">Nama Siswa 13</a>
+                <span class="github-username">@username13</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-14.jpg" alt="Foto Profil 14">
+                <a href="https://github.com/username14" target="_blank">Nama Siswa 14</a>
+                <span class="github-username">@username14</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-15.jpg" alt="Foto Profil 15">
+                <a href="https://github.com/username15" target="_blank">Nama Siswa 15</a>
+                <span class="github-username">@username15</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-16.jpg" alt="Foto Profil 16">
+                <a href="https://github.com/username16" target="_blank">Nama Siswa 16</a>
+                <span class="github-username">@username16</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-17.jpg" alt="Foto Profil 17">
+                <a href="https://github.com/username17" target="_blank">Nama Siswa 17</a>
+                <span class="github-username">@username17</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-18.jpg" alt="Foto Profil 18">
+                <a href="https://github.com/username18" target="_blank">Nama Siswa 18</a>
+                <span class="github-username">@username18</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-19.jpg" alt="Foto Profil 19">
+                <a href="https://github.com/username19" target="_blank">Nama Siswa 19</a>
+                <span class="github-username">@username19</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-20.jpg" alt="Foto Profil 20">
+                <a href="https://github.com/username20" target="_blank">Nama Siswa 20</a>
+                <span class="github-username">@username20</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-21.jpg" alt="Foto Profil 21">
+                <a href="https://github.com/username21" target="_blank">Nama Siswa 21</a>
+                <span class="github-username">@username21</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-22.jpg" alt="Foto Profil 22">
+                <a href="https://github.com/username22" target="_blank">Nama Siswa 22</a>
+                <span class="github-username">@username22</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-23.jpg" alt="Foto Profil 23">
+                <a href="https://github.com/username23" target="_blank">Nama Siswa 23</a>
+                <span class="github-username">@username23</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-24.jpg" alt="Foto Profil 24">
+                <a href="https://github.com/username24" target="_blank">Nama Siswa 24</a>
+                <span class="github-username">@username24</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-25.jpg" alt="Foto Profil 25">
+                <a href="https://github.com/username25" target="_blank">Nama Siswa 25</a>
+                <span class="github-username">@username25</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-26.jpg" alt="Foto Profil 26">
+                <a href="https://github.com/username26" target="_blank">Nama Siswa 26</a>
+                <span class="github-username">@username26</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-27.jpg" alt="Foto Profil 27">
+                <a href="https://github.com/username27" target="_blank">Nama Siswa 27</a>
+                <span class="github-username">@username27</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-28.jpg" alt="Foto Profil 28">
+                <a href="https://github.com/username28" target="_blank">Nama Siswa 28</a>
+                <span class="github-username">@username28</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-29.jpg" alt="Foto Profil 29">
+                <a href="https://github.com/username29" target="_blank">Nama Siswa 29</a>
+                <span class="github-username">@username29</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-30.jpg" alt="Foto Profil 30">
+                <a href="https://github.com/username30" target="_blank">Nama Siswa 30</a>
+                <span class="github-username">@username30</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-31.jpg" alt="Foto Profil 31">
+                <a href="https://github.com/username31" target="_blank">Nama Siswa 31</a>
+                <span class="github-username">@username31</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-32.jpg" alt="Foto Profil 32">
+                <a href="https://github.com/username32" target="_blank">Nama Siswa 32</a>
+                <span class="github-username">@username32</span>
+            </div>
+            <div class="profil-item">
+                <img src="../images/profil-33.jpg" alt="Foto Profil 33">
+                <a href="https://github.com/username33" target="_blank">Nama Siswa 33</a>
+                <span class="github-username">@username33</span>
+            </div>
+        </div>
+
+        <hr>
+        
+        <a href="../index.html" class="btn-kembali">&#9664; KEMBALI KE BERANDA</a>
+    </div>
+
+</body>
+</html>
