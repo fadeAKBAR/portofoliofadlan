@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Pelajaran - Fadlan Akbar</title>
+    <!-- Mengimpor font futuristik dari Google Fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* --- PENGATURAN DASAR --- */
+        body {
+            /* Latar belakang gradasi menyerupai ruang angkasa dalam */
+            background: radial-gradient(circle at top right, #1a0b2e 0%, #0b1021 50%, #000000 100%);
+            font-family: 'Space Mono', monospace;
+            color: #e0f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        /* --- WADAH UTAMA (GLASSMORPHISM) --- */
+        .container {
+            background: rgba(16, 24, 43, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.15), inset 0 0 15px rgba(0, 212, 255, 0.05);
+            padding: 40px 30px;
+            max-width: 1000px;
+            width: 100%;
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        /* --- TIPOGRAFI HEADER --- */
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00d4ff; /* Biru neon */
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #b388ff; /* Ungu kosmik */
+            font-size: 1.1rem;
+            font-weight: normal;
+            letter-spacing: 1px;
+        }
+
+        /* --- GAYA TABEL FUTURISTIK --- */
+        .table-wrapper {
+            overflow-x: auto; /* Agar tabel bisa digeser di HP */
+            border-radius: 12px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            background: rgba(0, 0, 0, 0.4);
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px; /* Lebar minimum agar teks tidak terlalu berdesakan di layar kecil */
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.15); /* Garis pembatas sel transparan */
+        }
+
+        /* Header Tabel (Nama Hari) */
+        th {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+            text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+            letter-spacing: 1px;
+        }
+
+        /* Sel Data / Isi Jadwal */
+        td {
+            font-size: 0.9rem;
+            color: #b2ebf2;
+            transition: all 0.3s ease;
+        }
+
+        /* Efek saat baris disorot (Hover Scanner) */
+        tbody tr:hover td {
+            background-color: rgba(0, 212, 255, 0.15);
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(0, 212, 255, 0.8);
+            cursor: pointer;
+        }
+
+        /* Baris Khusus Jam Istirahat */
+        .istirahat td {
+            background-color: rgba(179, 136, 255, 0.15); /* Latar ungu transparan */
+            color: #b388ff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-shadow: 0 0 8px rgba(179, 136, 255, 0.6);
+        }
+        
+        .istirahat:hover td {
+            background-color: rgba(179, 136, 255, 0.25);
+            color: #ffffff;
+            cursor: default;
+        }
+
+        /* --- ELEMEN TAMBAHAN --- */
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.8), transparent);
+            margin: 30px 0;
+        }
+
+        /* --- TOMBOL KEMBALI --- */
+        a.btn-kembali {
+            color: #00d4ff;
+            text-decoration: none;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.5);
+            padding: 10px 25px;
+            border-radius: 8px;
+            display: inline-block;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        /* Efek menyala terang saat tautan diarahkan */
+        a.btn-kembali:hover {
+            background: #00d4ff;
+            color: #000;
+            box-shadow: 0 0 15px #00d4ff, 0 0 30px #00d4ff;
+            border-color: #00d4ff;
+            transform: translateY(-3px);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>✨ Jadwal Pelajaran ✨</h1>
+            <h2>Kelas XI TKJ 3 - Fadlan Akbar 💻</h2>
+        </header>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>⏰ Jam</th>
+                        <th>Senin 🎒</th>
+                        <th>Selasa 🚀</th>
+                        <th>Rabu 💡</th>
+                        <th>Kamis 🎨</th>
+                        <th>Jumat 🕌</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>07:15 - 08:45</td>
+                        <td>Upacara & Wali Kelas</td>
+                        <td>Teknologi Layanan Jaringan (TLJ)</td>
+                        <td>Pendidikan Agama Islam</td>
+                        <td>Admin Sistem Jaringan (ASJ)</td>
+                        <td>Senam / Rohis</td>
+                    </tr>
+                    <tr>
+                        <td>08:45 - 10:15</td>
+                        <td>Matematika</td>
+                        <td>Bahasa Inggris</td>
+                        <td>Olahraga (PJOK)</td>
+                        <td>Admin Sistem Jaringan (ASJ)</td>
+                        <td>Bahasa Indonesia</td>
+                    </tr>
+                    <!-- Baris Istirahat -->
+                    <tr class="istirahat">
+                        <td>10:15 - 10:45</td>
+                        <td colspan="5">🍔 🧃 I S T I R A H A T 🧃 🍔</td>
+                    </tr>
+                    <tr>
+                        <td>10:45 - 12:15</td>
+                        <td>Admin Infrastruktur Jaringan (AIJ)</td>
+                        <td>Pend. Pancasila (PKN)</td>
+                        <td>Produk Kreatif & Kewirausahaan (PKK)</td>
+                        <td>Fisika / IPAS</td>
+                        <td>Teknologi Layanan Jaringan (TLJ)</td>
+                    </tr>
+                    <!-- Baris Istirahat Kedua -->
+                    <tr class="istirahat">
+                        <td>12:15 - 13:00</td>
+                        <td colspan="5">🕌 🍛 I S H O M A 🍛 🕌</td>
+                    </tr>
+                    <tr>
+                        <td>13:00 - 14:30</td>
+                        <td>Admin Infrastruktur Jaringan (AIJ)</td>
+                        <td>Sejarah Indonesia</td>
+                        <td>Produk Kreatif & Kewirausahaan (PKK)</td>
+                        <td>Seni Budaya</td>
+                        <td>Pramuka / Ekskul</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
+        
+        <!-- Tombol Kembali mengarah keluar dari folder Pages menuju index.html -->
+        <a href="../index.html" class="btn-kembali">&#9664; KEMBALI KE PROFIL</a>
+        
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Tamu Digital</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono&display=swap');
+
+        /* --- PENGATURAN DASAR --- */
+        body {
+            background: radial-gradient(circle at top right, #1a0b2e 0%, #0b1021 50%, #000000 100%);
+            font-family: 'Space Mono', monospace;
+            color: #e0f7fa;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        /* --- WADAH UTAMA BUKU TAMU --- */
+        .kartu-profil {
+            background: rgba(16, 24, 43, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px 45px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.15), inset 0 0 15px rgba(0, 212, 255, 0.05);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        /* --- TIPOGRAFI & HEADER --- */
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+            letter-spacing: 2px;
+            font-size: 2.2rem;
+            margin-top: 0;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        /* --- FORM BUKU TAMU --- */
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            color: #b388ff;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 212, 255, 0.4);
+            color: #e0f7fa;
+            font-family: 'Space Mono', monospace;
+            padding: 12px 15px;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        /* --- TOMBOL --- */
+        .btn-grup {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        button.btn-submit, a.btn-kembali {
+            color: #00d4ff;
+            text-decoration: none;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.5);
+            padding: 12px 25px;
+            border-radius: 8px;
+            display: inline-block;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        button.btn-submit:hover, a.btn-kembali:hover {
+            background: #00d4ff;
+            color: #000;
+            box-shadow: 0 0 15px #00d4ff, 0 0 30px #00d4ff;
+            border-color: #00d4ff;
+            transform: translateY(-3px);
+        }
+        
+        button.btn-submit:disabled {
+            background: #333;
+            color: #777;
+            border-color: #555;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.8), transparent);
+            margin: 35px 0;
+        }
+
+        /* --- PESAN STATUS --- */
+        #status-pesan {
+            margin-top: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            display: none;
+        }
+        .sukses { color: #00ffcc; text-shadow: 0 0 10px rgba(0, 255, 204, 0.6); }
+        .error { color: #ff0055; text-shadow: 0 0 10px rgba(255, 0, 85, 0.6); }
+        .loading { color: #ffcc00; text-shadow: 0 0 10px rgba(255, 204, 0, 0.6); }
+
+        /* Responsif */
+        @media (max-width: 600px) {
+            .btn-grup {
+                flex-direction: column-reverse;
+                gap: 15px;
+            }
+            .btn-grup a, .btn-grup button {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="kartu-profil">
+        <h1>Buku Tamu Digital</h1>
+        
+        <!-- Script URL akan dimasukkan pada atribut action secara dinamis lewat JS -->
+        <form id="form-buku-tamu" name="submit-to-google-sheet">
+            
+            <div class="form-group">
+                <label for="nama">NAMA LENGKAP</label>
+                <input type="text" id="nama" name="nama" required placeholder="Masukkan nama Anda">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">EMAIL / KONTAK</label>
+                <input type="text" id="email" name="email" required placeholder="Alamat Email atau No WA">
+            </div>
+
+            <div class="form-group">
+                <label for="pesan">PESAN & KESAN</label>
+                <textarea id="pesan" name="pesan" rows="4" required placeholder="Tuliskan pesan Anda..."></textarea>
+            </div>
+
+            <div class="btn-grup">
+                <a href="../index.html" class="btn-kembali">&#9664; KEMBALI</a>
+                <button type="submit" class="btn-submit">KIRIM PESAN</button>
+            </div>
+            
+        </form>
+
+        <div id="status-pesan"></div>
+
+        <hr>
+    </div>
+
+    <!-- Script Integrasi ke Google Spreadsheet (Google Apps Script) -->
+    <script>
+        // PENTING: Ganti string di bawah ini dengan URL Web App dari Google Apps Script Anda
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxEEyzoINXfvLsXX9wJWxgukVaVLbs1I9S30dLJBKFyGl70S75pfjuNRGV2kYwypQOi/exec';
+        const form = document.forms['submit-to-google-sheet'];
+        const btnSubmit = document.querySelector('.btn-submit');
+        const statusPesan = document.getElementById('status-pesan');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            
+            // Animasi loading pada tombol
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = 'MENGIRIM...';
+            statusPesan.className = 'loading';
+            statusPesan.innerHTML = 'Memproses data ke server...';
+            statusPesan.style.display = 'block';
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => {
+                    // Sukses
+                    statusPesan.className = 'sukses';
+                    statusPesan.innerHTML = 'Pesan berhasil dikirim! Terima kasih.';
+                    form.reset();
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerHTML = 'KIRIM PESAN';
+                    
+                    setTimeout(() => {
+                        statusPesan.style.display = 'none';
+                    }, 5000);
+                })
+                .catch(error => {
+                    // Error
+                    statusPesan.className = 'error';
+                    statusPesan.innerHTML = 'Gagal mengirim pesan. Pastikan URL Script Google sudah benar.';
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerHTML = 'KIRIM PESAN';
+                });
+        });
+    </script>
+</body>
+</html>

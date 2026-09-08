@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Sertifikat - Fadlan Akbar</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono&display=swap');
+
+        /* --- PENGATURAN DASAR --- */
+        body {
+            background: radial-gradient(circle at top right, #1a0b2e 0%, #0b1021 50%, #000000 100%);
+            font-family: 'Space Mono', monospace;
+            color: #e0f7fa;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        /* --- WADAH UTAMA GALERI --- */
+        .kartu-profil {
+            background: rgba(16, 24, 43, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px 45px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.15), inset 0 0 15px rgba(0, 212, 255, 0.05);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        /* --- TIPOGRAFI & HEADER --- */
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+            letter-spacing: 2px;
+            font-size: 2.2rem;
+            margin-top: 0;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        /* --- GRID GALERI --- */
+        .galeri-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .galeri-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- GAYA GAMBAR SERTIFIKAT --- */
+        .galeri-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            border: 3px solid #000;
+            box-shadow: 0 0 0 2px #00d4ff, 0 0 15px 5px rgba(0, 212, 255, 0.3);
+            transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+            object-fit: cover;
+        }
+
+        .galeri-item img:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 0 0 3px #00d4ff, 0 0 25px 10px rgba(0, 212, 255, 0.6);
+        }
+
+        .galeri-item p {
+            margin-top: 15px;
+            font-family: 'Orbitron', sans-serif;
+            color: #b388ff;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.8), transparent);
+            margin: 35px 0;
+        }
+
+        /* --- TOMBOL KEMBALI --- */
+        a.btn-kembali {
+            color: #00d4ff;
+            text-decoration: none;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.5);
+            padding: 10px 25px;
+            border-radius: 8px;
+            display: inline-block;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        a.btn-kembali:hover {
+            background: #00d4ff;
+            color: #000;
+            box-shadow: 0 0 15px #00d4ff, 0 0 30px #00d4ff;
+            border-color: #00d4ff;
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="kartu-profil">
+        <h1>Galeri Sertifikat</h1>
+        
+        <div class="galeri-grid">
+            <!-- Path menuju ../images/ dan format .png -->
+            <div class="galeri-item">
+                <img src="../images/sertifikat-bimtek.png" alt="Sertifikat Bimtek Kurikulum Merdeka">
+                <p>BIMTEK KURIKULUM MERDEKA</p>
+            </div>
+            
+            <div class="galeri-item">
+                <img src="../images/sertifikat-PI.png" alt="Sertifikat Praktek Industri">
+                <p>PRAKTEK INDUSTRI (PI)</p>
+            </div>
+            
+            <div class="galeri-item">
+                <img src="../images/sertifikat-PPG.png" alt="Sertifikat Pendidik (PPG)">
+                <p>SERTIFIKAT PENDIDIK (PPG)</p>
+            </div>
+
+             <div class="galeri-item">
+                <img src="../images/sertifikat google.png" alt="Sertifikat Pendidik (PPG)">
+                <p>SERTIFIKAT GOOGLE</p>
+            </div>
+        </div>
+
+        <hr>
+        
+        <!-- Tombol Kembali mengarah keluar dari folder Pages menuju index.html -->
+        <a href="../index.html" class="btn-kembali">&#9664; KEMBALI KE PROFIL</a>
+    </div>
+
+</body>
+</html>
