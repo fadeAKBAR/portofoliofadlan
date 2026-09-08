@@ -1,255 +1,65 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Chat App (Login Version)</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #ece5dd; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>Profil Saya - Fadlan Akbar</title>
     
-    /* Style Form Login */
-    #login-screen { position: absolute; width: 100%; height: 100%; background: #ece5dd; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
-    .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 300px; text-align: center; }
-    .login-box input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
-    .login-box button { width: 100%; padding: 12px; background: #075e54; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 10px; }
-    .login-box button:hover { background: #054c44; }
-    .error-msg { color: red; font-size: 14px; display: none; margin-top: 10px; }
-
-    /* Style Utama Chat */
-    #app { display: none; width: 100%; max-width: 900px; margin: 0 auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); display: flex; }
-    .sidebar { width: 30%; border-right: 1px solid #ddd; background: #f6f6f6; overflow-y: auto; }
-    .sidebar-header { background: #075e54; color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+    <!-- INI ADALAH KUNCI UTAMA: Menghubungkan HTML dengan file style.css -->
+    <link rel="stylesheet" href="CSS\style.css">
     
-    /* Tombol Logout */
-    .btn-logout { background: #d32f2f; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
-    .btn-logout:hover { background: #b71c1c; }
-
-    .user-list { list-style: none; padding: 0; margin: 0; }
-    .user-list li { padding: 15px; border-bottom: 1px solid #ddd; cursor: pointer; }
-    .user-list li:hover { background: #ebebeb; }
-    .chat-area { width: 70%; display: flex; flex-direction: column; background: #efe7dd; }
-    .chat-header { background: #075e54; color: white; padding: 15px; font-weight: bold; }
-    .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
-    .message { max-width: 60%; padding: 10px 15px; margin-bottom: 10px; border-radius: 10px; position: relative; clear: both; }
-    .msg-sent { background: #dcf8c6; align-self: flex-end; border-top-right-radius: 0; }
-    .msg-received { background: white; align-self: flex-start; border-top-left-radius: 0; }
-    .msg-time { font-size: 0.7em; color: #888; display: block; margin-top: 5px; text-align: right; }
-    .chat-input { display: flex; padding: 15px; background: #f0f0f0; }
-    .chat-input input { flex: 1; padding: 12px; border: none; border-radius: 20px; outline: none; font-size: 14px; }
-    .chat-input button { background: #075e54; color: white; border: none; padding: 10px 20px; margin-left: 10px; border-radius: 50%; cursor: pointer; }
-  </style>
 </head>
 <body>
 
-  <!-- Layar Login -->
-  <div id="login-screen">
-    <div class="login-box">
-      <h2>Login Chat App</h2>
-      <input type="text" id="input-id" placeholder="Masukkan ID">
-      <input type="text" id="input-nama" placeholder="Masukkan Nama">
-      <button id="btn-login" onclick="prosesLogin()">Masuk</button>
-      <div id="error-msg" class="error-msg">ID atau Nama salah!</div>
-    </div>
-  </div>
+    <div class="kartu-profil">
+        
+        <!-- Bagian Header / Nama -->
+        <h1>Fadlan Akbar, S.Pd., Gr.</h1>
+        <p><strong>Pendidik & Pengembang Web Pemula</strong></p>
+        
+        <!-- Bagian Foto Profil -->
+        <img src="images\foto-profil2.jpg" alt="Foto Profil Fadlan Akbar">
 
-  <!-- Layar Utama -->
-  <div id="app">
-    <div class="sidebar">
-      <div class="sidebar-header">
-        <span id="my-name-display">Profil</span>
-        <button class="btn-logout" onclick="logout()">Logout</button>
-      </div>
-      <ul class="user-list" id="user-list-ui"></ul>
-    </div>
+        <!-- Bagian Teks Perkenalan -->
+        <h2>Tentang Saya</h2>
+        <p>
+            Selamat datang di halaman website pertama saya! Saya adalah seorang pendidik yang bersemangat dalam dunia pengajaran dan teknologi. 
+            Saat ini saya sedang mendalami ilmu pembuatan website mulai dari dasar HTML, CSS, hingga publikasi menggunakan GitHub.
+        </p>
 
-    <div class="chat-area">
-      <div class="chat-header" id="chat-with-name">Pilih kontak untuk mulai chat</div>
-      <div class="chat-box" id="chat-box"></div>
-      <div class="chat-input" style="visibility: hidden;" id="input-area">
-        <input type="text" id="msg-input" placeholder="Ketik pesan..." onkeypress="handleEnter(event)">
-        <button onclick="kirimPesan()">➤</button>
-      </div>
-    </div>
-  </div>
+        <hr>
+        <!--Bagian Jadwal Mapel Saya-->
 
-  <script>
-    // ==========================================
-    // PASTE URL APPS SCRIPT ANDA DI SINI (HASIL DEPLOY BARU)
-    // ==========================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySefFAg-v2WZMmGbALcg2xYnevfIEhy-1Z_vOqCXRSMA3brQVPaBY8qpd6vBHSYDSG/exec";
+        <h1>Menu</h1>
+        <ul>
+        <li>
+            <a href="Pages/chat.html">Aplikasi Sendiri</a>
+            <a href="Pages/jadwal.html">Lihat Jadwal Saya</a>
+            <a href="Pages/sertifikat.html">Sertifikat Saya</a>
+            <a href="Pages/galery.html">Galery Foto</a>
+            <a href="Pages/bukutamu.html">Buku Tamu Digital</a>
+        </li>
+        </ul>
+        <!-- Bagian Link Sosial Media -->
+        <h2>Mari Terhubung!</h2>
+        <ul>
+        <li>
+            <a href="https://www.instagram.com/fadlan.akbar/" target="_blank">Kunjungi Instagram Saya</a>
+        </li>
+        <li>
+            <a href="https://www.tiktok.com/@aafadea" target="_blank">TikTok Saya</a>
+        </li>
+        <li>
+            <a href="fadlannakbarr@gmail.com">Kirim Email ke Saya</a>
+        </li>
+        </ul>
 
-    let myName = "";
-    let chatWithName = "";
-    let chatInterval = null; // Menyimpan ID interval refresh
+        <hr>
+        
+        <!-- Bagian Footer -->
+        <p class="footer-teks"><i>Website profil ini dibuat khusus untuk latihan HTML & CSS Dasar.</i></p>
 
-    // FUNGSI LOGIN
-    function prosesLogin() {
-      const idInput = document.getElementById("input-id").value.trim();
-      const namaInput = document.getElementById("input-nama").value.trim();
-      const btn = document.getElementById("btn-login");
-      const errorMsg = document.getElementById("error-msg");
+    </div> 
 
-      if (!idInput || !namaInput) {
-        errorMsg.innerText = "Harap isi ID dan Nama!";
-        errorMsg.style.display = "block";
-        return;
-      }
-
-      // Ubah tombol jadi loading
-      btn.innerText = "Memeriksa...";
-      btn.disabled = true;
-      errorMsg.style.display = "none";
-
-      const url = `${SCRIPT_URL}?action=login&id=${encodeURIComponent(idInput)}&nama=${encodeURIComponent(namaInput)}`;
-      
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          btn.innerText = "Masuk";
-          btn.disabled = false;
-          
-          if (data.success) {
-            // Berhasil login
-            myName = namaInput;
-            document.getElementById("login-screen").style.display = "none";
-            document.getElementById("app").style.display = "flex";
-            document.getElementById("my-name-display").innerText = myName;
-            
-            // Panggil daftar kontak
-            loadKontak();
-          } else {
-            // Gagal login
-            errorMsg.innerText = data.message;
-            errorMsg.style.display = "block";
-          }
-        })
-        .catch(error => {
-          btn.innerText = "Masuk";
-          btn.disabled = false;
-          errorMsg.innerText = "Terjadi kesalahan server.";
-          errorMsg.style.display = "block";
-        });
-    }
-
-    // FUNGSI LOGOUT
-    function logout() {
-      myName = "";
-      chatWithName = "";
-      
-      // Hentikan auto-refresh chat
-      if (chatInterval) clearInterval(chatInterval);
-
-      // Kembalikan UI ke halaman login
-      document.getElementById("login-screen").style.display = "flex";
-      document.getElementById("app").style.display = "none";
-      
-      // Kosongkan form dan chat area
-      document.getElementById("input-id").value = "";
-      document.getElementById("input-nama").value = "";
-      document.getElementById("chat-box").innerHTML = "";
-      document.getElementById("chat-with-name").innerText = "Pilih kontak untuk mulai chat";
-      document.getElementById("input-area").style.visibility = "hidden";
-      document.getElementById("error-msg").style.display = "none";
-    }
-
-    // LOAD KONTAK SETELAH LOGIN BERHASIL
-    function loadKontak() {
-      fetch(SCRIPT_URL + "?action=getUsers")
-        .then(response => response.json())
-        .then(users => {
-          const ul = document.getElementById("user-list-ui");
-          ul.innerHTML = "";
-          users.forEach(u => {
-            if (u.nama !== myName) { // Jangan tampilkan nama sendiri
-              let li = document.createElement("li");
-              li.innerText = u.nama;
-              li.onclick = () => bukaChat(u.nama);
-              ul.appendChild(li);
-            }
-          });
-        });
-    }
-
-    // MEMBUKA RUANG CHAT
-    function bukaChat(namaTeman) {
-      chatWithName = namaTeman;
-      document.getElementById("chat-with-name").innerText = "Chat dengan: " + chatWithName;
-      document.getElementById("input-area").style.visibility = "visible";
-      document.getElementById("chat-box").innerHTML = "<p style='text-align:center; color:#888;'>Memuat pesan...</p>";
-      
-      muatPesan();
-      
-      // Bersihkan interval lama jika ada, lalu buat interval baru (refresh 5 detik)
-      if (chatInterval) clearInterval(chatInterval);
-      chatInterval = setInterval(muatPesan, 5000);
-    }
-
-    // MENGAMBIL PESAN DARI DATABASE
-    function muatPesan() {
-      if(!chatWithName) return;
-      const url = `${SCRIPT_URL}?action=getChats&user1=${encodeURIComponent(myName)}&user2=${encodeURIComponent(chatWithName)}`;
-      
-      fetch(url)
-        .then(response => response.json())
-        .then(chats => tampilkanPesan(chats));
-    }
-
-    // MENAMPILKAN PESAN KE LAYAR
-    function tampilkanPesan(chats) {
-      const box = document.getElementById("chat-box");
-      
-      // Cek apakah scroll ada di posisi paling bawah sebelum update (untuk mencegah auto scroll mengganggu user)
-      const isScrolledToBottom = box.scrollHeight - box.clientHeight <= box.scrollTop + 10;
-      
-      box.innerHTML = "";
-      chats.forEach(chat => {
-        let div = document.createElement("div");
-        div.className = (chat.pengirim === myName) ? "message msg-sent" : "message msg-received";
-        div.innerHTML = chat.pesan + `<span class="msg-time">${chat.waktu}</span>`;
-        box.appendChild(div);
-      });
-      
-      if (isScrolledToBottom) {
-        box.scrollTop = box.scrollHeight;
-      }
-    }
-
-    // MENGIRIM PESAN
-    function kirimPesan() {
-      const input = document.getElementById("msg-input");
-      const pesan = input.value.trim();
-      
-      if (pesan === "") return;
-      
-      // Animasi Optimistic UI (tampil instan sebelum masuk database)
-      const box = document.getElementById("chat-box");
-      let div = document.createElement("div");
-      div.className = "message msg-sent";
-      div.style.opacity = "0.7";
-      div.innerHTML = pesan + `<span class="msg-time">Mengirim...</span>`;
-      box.appendChild(div);
-      box.scrollTop = box.scrollHeight;
-      input.value = "";
-
-      let formData = new URLSearchParams();
-      formData.append('pengirim', myName);
-      formData.append('penerima', chatWithName);
-      formData.append('pesan', pesan);
-
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: formData,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if(data.success) muatPesan(); // Refresh otomatis jika sukses
-      });
-    }
-
-    function handleEnter(e) {
-      if (e.key === 'Enter') kirimPesan();
-    }
-  </script>
 </body>
 </html>
