@@ -3,13 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Chat App (GitHub Version)</title>
+  <title>Chat App (Login Version)</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #ece5dd; }
-    #login-screen { position: absolute; width: 100%; height: 100%; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
-    #app { display: none; width: 100%; max-width: 800px; margin: 0 auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); display: flex; }
+    
+    /* Style Form Login */
+    #login-screen { position: absolute; width: 100%; height: 100%; background: #ece5dd; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
+    .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 300px; text-align: center; }
+    .login-box input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+    .login-box button { width: 100%; padding: 12px; background: #075e54; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+    .login-box button:hover { background: #054c44; }
+    .error-msg { color: red; font-size: 14px; display: none; margin-top: 10px; }
+
+    /* Style Utama Chat */
+    #app { display: none; width: 100%; max-width: 900px; margin: 0 auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); display: flex; }
     .sidebar { width: 30%; border-right: 1px solid #ddd; background: #f6f6f6; overflow-y: auto; }
-    .sidebar-header { background: #075e54; color: white; padding: 15px; font-weight: bold; }
+    .sidebar-header { background: #075e54; color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+    
+    /* Tombol Logout */
+    .btn-logout { background: #d32f2f; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+    .btn-logout:hover { background: #b71c1c; }
+
     .user-list { list-style: none; padding: 0; margin: 0; }
     .user-list li { padding: 15px; border-bottom: 1px solid #ddd; cursor: pointer; }
     .user-list li:hover { background: #ebebeb; }
@@ -27,19 +41,24 @@
 </head>
 <body>
 
-  <!-- Layar Pilih Akun -->
+  <!-- Layar Login -->
   <div id="login-screen">
-    <h2>Pilih Akun Anda</h2>
-    <select id="my-account" style="padding: 10px; font-size: 16px; margin-bottom: 20px;">
-      <option value="">Memuat data pengguna...</option>
-    </select>
-    <button onclick="masukApp()" style="padding: 10px 20px; background:#075e54; color:white; border:none; cursor:pointer;">Masuk</button>
+    <div class="login-box">
+      <h2>Login Chat App</h2>
+      <input type="text" id="input-id" placeholder="Masukkan ID">
+      <input type="text" id="input-nama" placeholder="Masukkan Nama">
+      <button id="btn-login" onclick="prosesLogin()">Masuk</button>
+      <div id="error-msg" class="error-msg">ID atau Nama salah!</div>
+    </div>
   </div>
 
   <!-- Layar Utama -->
-  <div id="app" style="display: none;">
+  <div id="app">
     <div class="sidebar">
-      <div class="sidebar-header" id="my-name-display">WhatsApp Web Clone</div>
+      <div class="sidebar-header">
+        <span id="my-name-display">Profil</span>
+        <button class="btn-logout" onclick="logout()">Logout</button>
+      </div>
       <ul class="user-list" id="user-list-ui"></ul>
     </div>
 
@@ -55,79 +74,134 @@
 
   <script>
     // ==========================================
-    // PASTE URL APPS SCRIPT ANDA DI SINI
+    // PASTE URL APPS SCRIPT ANDA DI SINI (HASIL DEPLOY BARU)
     // ==========================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXKK_qjwa84JEYyMBhzpk2deHxSfm47tDm_EvAc8PqbxEUVrvjN7iDwyFd7Zze61l6/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySefFAg-v2WZMmGbALcg2xYnevfIEhy-1Z_vOqCXRSMA3brQVPaBY8qpd6vBHSYDSG/exec";
 
     let myName = "";
     let chatWithName = "";
+    let chatInterval = null; // Menyimpan ID interval refresh
 
-    // Ambil data user saat web pertama kali dibuka
-    fetch(SCRIPT_URL + "?action=getUsers")
-      .then(response => response.json())
-      .then(users => populateUsers(users))
-      .catch(error => console.error('Error fetching users:', error));
+    // FUNGSI LOGIN
+    function prosesLogin() {
+      const idInput = document.getElementById("input-id").value.trim();
+      const namaInput = document.getElementById("input-nama").value.trim();
+      const btn = document.getElementById("btn-login");
+      const errorMsg = document.getElementById("error-msg");
 
-    function populateUsers(users) {
-      const select = document.getElementById("my-account");
-      const ul = document.getElementById("user-list-ui");
-      select.innerHTML = "";
-      ul.innerHTML = "";
-
-      users.forEach(u => {
-        let opt = document.createElement("option");
-        opt.value = u.nama;
-        opt.text = u.nama;
-        select.appendChild(opt);
-
-        let li = document.createElement("li");
-        li.innerText = u.nama;
-        li.onclick = () => bukaChat(u.nama);
-        ul.appendChild(li);
-      });
-    }
-
-    function masukApp() {
-      const select = document.getElementById("my-account");
-      myName = select.value;
-      if (!myName) return;
-      
-      document.getElementById("login-screen").style.display = "none";
-      document.getElementById("app").style.display = "flex";
-      document.getElementById("my-name-display").innerText = "Masuk: " + myName;
-    }
-
-    function bukaChat(namaTeman) {
-      if (namaTeman === myName) {
-        alert("Anda tidak bisa chat dengan diri sendiri!");
+      if (!idInput || !namaInput) {
+        errorMsg.innerText = "Harap isi ID dan Nama!";
+        errorMsg.style.display = "block";
         return;
       }
+
+      // Ubah tombol jadi loading
+      btn.innerText = "Memeriksa...";
+      btn.disabled = true;
+      errorMsg.style.display = "none";
+
+      const url = `${SCRIPT_URL}?action=login&id=${encodeURIComponent(idInput)}&nama=${encodeURIComponent(namaInput)}`;
+      
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          btn.innerText = "Masuk";
+          btn.disabled = false;
+          
+          if (data.success) {
+            // Berhasil login
+            myName = namaInput;
+            document.getElementById("login-screen").style.display = "none";
+            document.getElementById("app").style.display = "flex";
+            document.getElementById("my-name-display").innerText = myName;
+            
+            // Panggil daftar kontak
+            loadKontak();
+          } else {
+            // Gagal login
+            errorMsg.innerText = data.message;
+            errorMsg.style.display = "block";
+          }
+        })
+        .catch(error => {
+          btn.innerText = "Masuk";
+          btn.disabled = false;
+          errorMsg.innerText = "Terjadi kesalahan server.";
+          errorMsg.style.display = "block";
+        });
+    }
+
+    // FUNGSI LOGOUT
+    function logout() {
+      myName = "";
+      chatWithName = "";
+      
+      // Hentikan auto-refresh chat
+      if (chatInterval) clearInterval(chatInterval);
+
+      // Kembalikan UI ke halaman login
+      document.getElementById("login-screen").style.display = "flex";
+      document.getElementById("app").style.display = "none";
+      
+      // Kosongkan form dan chat area
+      document.getElementById("input-id").value = "";
+      document.getElementById("input-nama").value = "";
+      document.getElementById("chat-box").innerHTML = "";
+      document.getElementById("chat-with-name").innerText = "Pilih kontak untuk mulai chat";
+      document.getElementById("input-area").style.visibility = "hidden";
+      document.getElementById("error-msg").style.display = "none";
+    }
+
+    // LOAD KONTAK SETELAH LOGIN BERHASIL
+    function loadKontak() {
+      fetch(SCRIPT_URL + "?action=getUsers")
+        .then(response => response.json())
+        .then(users => {
+          const ul = document.getElementById("user-list-ui");
+          ul.innerHTML = "";
+          users.forEach(u => {
+            if (u.nama !== myName) { // Jangan tampilkan nama sendiri
+              let li = document.createElement("li");
+              li.innerText = u.nama;
+              li.onclick = () => bukaChat(u.nama);
+              ul.appendChild(li);
+            }
+          });
+        });
+    }
+
+    // MEMBUKA RUANG CHAT
+    function bukaChat(namaTeman) {
       chatWithName = namaTeman;
       document.getElementById("chat-with-name").innerText = "Chat dengan: " + chatWithName;
       document.getElementById("input-area").style.visibility = "visible";
-      
       document.getElementById("chat-box").innerHTML = "<p style='text-align:center; color:#888;'>Memuat pesan...</p>";
+      
       muatPesan();
       
-      // Auto-refresh tiap 5 detik
-      setInterval(muatPesan, 5000);
+      // Bersihkan interval lama jika ada, lalu buat interval baru (refresh 5 detik)
+      if (chatInterval) clearInterval(chatInterval);
+      chatInterval = setInterval(muatPesan, 5000);
     }
 
+    // MENGAMBIL PESAN DARI DATABASE
     function muatPesan() {
       if(!chatWithName) return;
-      
       const url = `${SCRIPT_URL}?action=getChats&user1=${encodeURIComponent(myName)}&user2=${encodeURIComponent(chatWithName)}`;
       
       fetch(url)
         .then(response => response.json())
-        .then(chats => tampilkanPesan(chats))
-        .catch(error => console.error('Error fetching chats:', error));
+        .then(chats => tampilkanPesan(chats));
     }
 
+    // MENAMPILKAN PESAN KE LAYAR
     function tampilkanPesan(chats) {
       const box = document.getElementById("chat-box");
-      box.innerHTML = "";
       
+      // Cek apakah scroll ada di posisi paling bawah sebelum update (untuk mencegah auto scroll mengganggu user)
+      const isScrolledToBottom = box.scrollHeight - box.clientHeight <= box.scrollTop + 10;
+      
+      box.innerHTML = "";
       chats.forEach(chat => {
         let div = document.createElement("div");
         div.className = (chat.pengirim === myName) ? "message msg-sent" : "message msg-received";
@@ -135,16 +209,19 @@
         box.appendChild(div);
       });
       
-      box.scrollTop = box.scrollHeight;
+      if (isScrolledToBottom) {
+        box.scrollTop = box.scrollHeight;
+      }
     }
 
+    // MENGIRIM PESAN
     function kirimPesan() {
       const input = document.getElementById("msg-input");
       const pesan = input.value.trim();
       
       if (pesan === "") return;
       
-      // UI Optimistic Update (Munculkan pesan seolah sudah terkirim)
+      // Animasi Optimistic UI (tampil instan sebelum masuk database)
       const box = document.getElementById("chat-box");
       let div = document.createElement("div");
       div.className = "message msg-sent";
@@ -154,31 +231,24 @@
       box.scrollTop = box.scrollHeight;
       input.value = "";
 
-      // Siapkan data untuk POST request
       let formData = new URLSearchParams();
       formData.append('pengirim', myName);
       formData.append('penerima', chatWithName);
       formData.append('pesan', pesan);
 
-      // Kirim data ke Google Apps Script
       fetch(SCRIPT_URL, {
         method: 'POST',
         body: formData,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       })
       .then(response => response.json())
       .then(data => {
-        if(data.success) muatPesan();
-      })
-      .catch(error => console.error('Error sending message:', error));
+        if(data.success) muatPesan(); // Refresh otomatis jika sukses
+      });
     }
 
     function handleEnter(e) {
-      if (e.key === 'Enter') {
-        kirimPesan();
-      }
+      if (e.key === 'Enter') kirimPesan();
     }
   </script>
 </body>
